@@ -1,0 +1,8 @@
+site_name: Feather
+
+theme:
+  name: material
+
+nav:
+  - Home: index.md
+  - protocol.md
