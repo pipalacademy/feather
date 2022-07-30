@@ -56,15 +56,15 @@ taken to execute the request.
 
 ```
 $ curl -i \
-    -H 'x-webrepl-args: webrepl' \
-    -H 'x-webrepl-env: X=1 DEBUG=true' \
-    -H 'x-webrepl-entrypoint: hello.py' \
+    -H 'x-feather-args: feather' \
+    -H 'x-feather-env: X=1 DEBUG=true' \
+    -H 'x-feather-entrypoint: hello.py' \
     -d hello.py=@hello.py
 HTTP/1.1 200 OK
 Content-type: text/plain
-x-webrepl-exit-status: 0
-x-webrepl-time-taken: 0.1
+x-feather-exit-status: 0
+x-feather-time-taken: 0.1
 
-sys.argv: ['webrepl']
-Hello, webrepl!
+sys.argv: ['feather']
+Hello, feather!
 ```
