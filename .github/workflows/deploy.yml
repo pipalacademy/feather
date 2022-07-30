@@ -1,0 +1,38 @@
+name: Github Pages for Docs
+
+on:
+  push:
+    branches:
+      - main
+      - gh-actions
+
+  # Allows you to run this workflow manually from the Actions tab on GitHub.
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-20.04
+
+    # Allow this job to push changes to your repository
+    permissions:
+      contents: write
+
+    steps:
+      - name: Check out your repository using git
+        uses: actions/checkout@v2
+
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Installing dependencies
+        run: pip install mkdocs-material
+
+      - name: Build the docs
+        run: mkdocs build
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./site
