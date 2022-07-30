@@ -13,7 +13,7 @@
     
     
       
-        <title>The Feature Protocol - Feather</title>
+        <title>The Feather Protocol - Feather</title>
       
     
     
@@ -60,7 +60,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#the-feature-protocol" class="md-skip">
+        <a href="#the-feather-protocol" class="md-skip">
           Skip to content
         </a>
       
@@ -93,7 +93,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              The Feature Protocol
+              The Feather Protocol
             
           </span>
         </div>
@@ -203,9 +203,67 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          The Feather Protocol
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
-        The Feature Protocol
+        The Feather Protocol
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#version" class="md-nav__link">
+    Version
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-protocol" class="md-nav__link">
+    The Protocol
+  </a>
+  
+    <nav class="md-nav" aria-label="The Protocol">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#code-execution" class="md-nav__link">
+    Code Execution
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#request-and-response-headers" class="md-nav__link">
+    Request and Response Headers
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -231,6 +289,48 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#version" class="md-nav__link">
+    Version
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-protocol" class="md-nav__link">
+    The Protocol
+  </a>
+  
+    <nav class="md-nav" aria-label="The Protocol">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#code-execution" class="md-nav__link">
+    Code Execution
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#request-and-response-headers" class="md-nav__link">
+    Request and Response Headers
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -243,8 +343,56 @@
                 
 
 
-<h1 id="the-feature-protocol">The Feature Protocol</h1>
-<p>Coming soon!</p>
+<h1 id="the-feather-protocol">The Feather Protocol</h1>
+<p>The Feather Protocol describes the standard HTTP API supported by all Feather runtimes.</p>
+<h2 id="version">Version</h2>
+<p>This document describes the Feather Protocol, version <code>0.1</code>.</p>
+<h2 id="the-protocol">The Protocol</h2>
+<h3 id="code-execution">Code Execution</h3>
+<p>The feather protocol supports three ways to execute code.</p>
+<p>The first approach is to send the code as a payload.</p>
+<pre><code>$ curl -d 'print(&quot;hello, world!&quot;)' https://feather-app/runtimes/python
+hello, world!
+</code></pre>
+<p>The second approach is to send the file as multi-part formdata. This
+allows sending one or more files for execution.</p>
+<pre><code>$ cat main.py
+print(&quot;hello, world!&quot;)
+
+$ curl -Fmain.py=@main.py https://feather-app/runtimes/python
+hello, world!
+</code></pre>
+<p>The third approach is to send the payload as JSON.</p>
+<pre><code>$ cat payload.json
+{
+    &quot;files&quot;: [
+        {&quot;name&quot;: &quot;main.py&quot;, &quot;contents&quot;: &quot;print('hello, world!')&quot;}
+    ],
+}
+$ curl \
+    -H 'Content-type: application/json' \
+    -d @payload.json                    \
+    https://feather-app/runtimes/python
+hello, world!
+</code></pre>
+<h3 id="request-and-response-headers">Request and Response Headers</h3>
+<p>The feather protocol supports special headers to specify command-line arguments,
+environment variables and the entrypoint, the source file to execute.</p>
+<p>The response includes headers to indicate the exit status and the time
+taken to execute the request.</p>
+<pre><code>$ curl -i \
+    -H 'x-webrepl-args: webrepl' \
+    -H 'x-webrepl-env: X=1 DEBUG=true' \
+    -H 'x-webrepl-entrypoint: hello.py' \
+    -d hello.py=@hello.py
+HTTP/1.1 200 OK
+Content-type: text/plain
+x-webrepl-exit-status: 0
+x-webrepl-time-taken: 0.1
+
+sys.argv: ['webrepl']
+Hello, webrepl!
+</code></pre>
 
               
             </article>
